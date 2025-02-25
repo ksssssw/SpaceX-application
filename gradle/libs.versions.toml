@@ -9,7 +9,16 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.0"
 composeBom = "2024.04.01"
 
+# production libraries
+coil = "3.1.0"
+okhttp-logging-interceptor          = "4.12.0"
+retrofit                            = "2.11.0"
+
 [libraries]
+coil = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
+okhttp-logging-interceptor          = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp-logging-interceptor" }
+retrofit                            = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+#coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
