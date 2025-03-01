@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -60,4 +62,11 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.retrofit)
 //    implementation(libs.coil.network.okhttp)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.navigation.compose)
+}
+
+kapt {
+    correctErrorTypes = true
 }
