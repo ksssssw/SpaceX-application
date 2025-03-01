@@ -13,10 +13,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.spacexapp.presentation.navigation.BottomNavigationBar
 import com.example.spacexapp.presentation.navigation.NavRoutes
-import com.example.spacexapp.presentation.screens.Info.InfoScreen
-import com.example.spacexapp.presentation.screens.Rockets.RocketsScreen
+import com.example.spacexapp.presentation.screens.info.InfoScreen
+import com.example.spacexapp.presentation.screens.rockets.RocketsScreen
 import com.example.spacexapp.presentation.theme.SpaceXAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

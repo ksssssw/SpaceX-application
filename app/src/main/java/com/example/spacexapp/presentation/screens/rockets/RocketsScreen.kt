@@ -1,12 +1,12 @@
-package com.example.spacexapp.presentation.screens.Info
+package com.example.spacexapp.presentation.screens.rockets
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun InfoScreen(
+fun RocketsScreen(
     modifier: Modifier = Modifier
 ) {
-    Text("Info")
+    Text("Rockets")
 }
