@@ -62,7 +62,7 @@ dependencies {
 
     implementation(libs.coil)
     implementation(libs.retrofit)
-//    implementation(libs.coil.network.okhttp)
+    implementation(libs.coil.network.okhttp)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.navigation.compose)
