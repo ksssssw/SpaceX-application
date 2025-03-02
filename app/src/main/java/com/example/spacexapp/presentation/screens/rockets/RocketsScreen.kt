@@ -1,5 +1,6 @@
 package com.example.spacexapp.presentation.screens.rockets
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,7 +49,8 @@ import com.example.spacexapp.domain.models.Rocket
 
 @Composable
 fun RocketsScreen(
-    viewModel: RocketsViewModel = hiltViewModel()
+    viewModel: RocketsViewModel = hiltViewModel(),
+    onRocketClick: (String) -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -60,6 +62,7 @@ fun RocketsScreen(
             uiState.isLoading && uiState.rockets.isEmpty() -> {
                 CircularProgressIndicator()
             }
+
             uiState.error != null && uiState.rockets.isEmpty() -> {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -77,13 +80,16 @@ fun RocketsScreen(
                     }
                 }
             }
+
             uiState.rockets.isNotEmpty() -> {
                 RocketsList(
                     rockets = uiState.rockets,
                     isLoadingMore = uiState.isLoadingMore,
-                    onLoadMore = { viewModel.loadNextPage() }
+                    onLoadMore = { viewModel.loadNextPage() },
+                    onRocketClick = onRocketClick
                 )
             }
+
             else -> {
                 Text(text = "로켓을 찾을 수 없습니다")
             }
@@ -95,7 +101,8 @@ fun RocketsScreen(
 fun RocketsList(
     rockets: List<Rocket>,
     isLoadingMore: Boolean,
-    onLoadMore: () -> Unit
+    onLoadMore: () -> Unit,
+    onRocketClick: (String) -> Unit
 ) {
     val listState = rememberLazyListState()
 
@@ -120,7 +127,10 @@ fun RocketsList(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(rockets) { rocket ->
-            RocketItem(rocket = rocket)
+            RocketItem(
+                rocket = rocket,
+                onClick = { onRocketClick(rocket.id) }
+            )
         }
 
         if (isLoadingMore) {
@@ -141,9 +151,9 @@ fun RocketsList(
 }
 
 @Composable
-fun RocketItem(rocket: Rocket) {
+fun RocketItem(rocket: Rocket, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(

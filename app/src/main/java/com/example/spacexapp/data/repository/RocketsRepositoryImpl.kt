@@ -15,6 +15,9 @@ class RocketRepositoryImpl @Inject constructor(
     private val api: SpaceXApi
 ) : RocketRepository {
 
+    // Cache for rockets to avoid unnecessary network calls
+    private val rocketCache = mutableMapOf<String, Rocket>()
+
     override fun getRockets(page: Int, limit: Int): Flow<Result<RocketsPage>> = flow {
         try {
             val queryRequest = RocketQueryRequest(
@@ -26,14 +29,56 @@ class RocketRepositoryImpl @Inject constructor(
 
             val response = api.getRocketsPaginated(queryRequest)
 
+            val rockets = response.docs.map { it.toDomainModel() }
+
+            // Update cache with fetched rockets
+            rockets.forEach { rocket ->
+                rocketCache[rocket.id] = rocket
+            }
+
             val rocketsPage = RocketsPage(
-                rockets = response.docs.map { it.toDomainModel() },
+                rockets = rockets,
                 currentPage = response.page,
                 totalPages = response.totalPages,
                 hasNextPage = response.hasNextPage
             )
 
             emit(Result.success(rocketsPage))
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override fun getRocketById(rocketId: String): Flow<Result<Rocket>> = flow {
+        try {
+            // First check if the rocket is in the cache
+            val cachedRocket = rocketCache[rocketId]
+            if (cachedRocket != null) {
+                emit(Result.success(cachedRocket))
+                return@flow
+            }
+
+            // If not in cache, fetch it from API
+            // Note: SpaceX API might not have a direct endpoint for single rocket,
+            // so we may need to query with a filter or update the API interface
+            val queryRequest = RocketQueryRequest(
+                query = mapOf("_id" to rocketId),
+                options = QueryOptions(page = 1, limit = 1)
+            )
+
+            val response = api.getRocketsPaginated(queryRequest)
+
+            if (response.docs.isEmpty()) {
+                emit(Result.failure(NoSuchElementException("Rocket not found")))
+                return@flow
+            }
+
+            val rocket = response.docs.first().toDomainModel()
+
+            // Update cache
+            rocketCache[rocket.id] = rocket
+
+            emit(Result.success(rocket))
         } catch (e: Exception) {
             emit(Result.failure(e))
         }

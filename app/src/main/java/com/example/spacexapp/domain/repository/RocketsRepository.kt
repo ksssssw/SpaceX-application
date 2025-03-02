@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface RocketRepository {
     fun getRockets(page: Int, limit: Int): Flow<Result<RocketsPage>>
+    fun getRocketById(rocketId: String): Flow<Result<Rocket>>
 }
 
 data class RocketsPage(
