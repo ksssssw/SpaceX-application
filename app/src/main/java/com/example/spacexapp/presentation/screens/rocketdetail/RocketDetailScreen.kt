@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -24,6 +25,7 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.example.spacexapp.domain.models.Rocket
+import com.example.spacexapp.presentation.theme.SpaceXAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -274,5 +276,34 @@ fun SpecItem(label: String, value: String) {
             text = value,
             style = MaterialTheme.typography.bodyMedium
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RocketDetailScreenPreview() {
+    SpaceXAppTheme {
+        val previewRocket = Rocket(
+            id = "falcon9",
+            name = "Falcon 9",
+            description = "Falcon 9 is a reusable, two-stage rocket designed and manufactured by SpaceX for the reliable and safe transport of people and payloads into Earth orbit and beyond.",
+            firstFlight = "2010-06-04",
+            active = true,
+            stages = 2,
+            boosters = 0,
+            costPerLaunch = 50000000,
+            successRatePct = 98,
+            height = 70.0,
+            diameter = 3.7,
+            mass = 549054,
+            images = listOf(
+                "https://farm1.staticflickr.com/929/28787338307_3453a11a77_b.jpg",
+                "https://farm4.staticflickr.com/3955/32915197674_eee74d81bb_b.jpg"
+            )
+        )
+
+        Surface {
+            RocketDetailContent(rocket = previewRocket)
+        }
     }
 }
